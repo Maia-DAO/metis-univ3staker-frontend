@@ -96,7 +96,7 @@ export const useUserPositions = (poolId?: string) => {
           amount0,
           amount1,
           valueUSD,
-          deposited: ZERO_ADDRESS !== stakerPosition?.owner,
+          deposited: ZERO_ADDRESS === stakerPosition?.oldOwner,
         };
       })
       .filter((p: any) => (poolId === undefined ? true : p.pool.id === poolId));
