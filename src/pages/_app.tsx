@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer/Footer";
+//import Footer from "@/components/Footer/Footer";
 import RewardsWarning from "@/components/RewardsWarning/RewardsWarning";
 import { wagmiClient } from "@/config";
 import { useUniswapClient } from "@/hooks/web3";
@@ -11,6 +11,9 @@ import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import { PropsWithChildren } from "react";
 import { WagmiConfig } from "wagmi";
+import Image from "next/image";
+
+import coin from '../../public/coin.png';
 
 const Header = dynamic(() => import("@/components/Header"), { ssr: false });
 
@@ -20,10 +23,11 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
     <ApolloProvider client={client}>
       <Header />
       <RewardsWarning />
-      <main className="flex flex-col items-center px-12 py-8 gap-6">
+      <main className="flex flex-col items-center py-12">
         {children}
+        <div className={`w-[336px] h-[286px] bg-[#D3D3D3 / 50] bg-center bg-no-repeat opacity-90 absolute left-0 bottom-8 -z-10 mix-blend-lighten`} style={{backgroundImage: `url(${coin.src})`}} />
       </main>
-      <Footer />
+      {/*<Footer />*/}
     </ApolloProvider>
   );
 };

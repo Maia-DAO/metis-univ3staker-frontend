@@ -1,8 +1,15 @@
+@import "../fonts/opensans.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .table-rounded-td-lg tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem;}
+    .table-rounded-td-lg tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem;}
+}
 
 body {
-    @apply bg-dark-medium
+    @apply bg-gradient-190 from-dark-purple to-blue-yankees bg-cover bg-center min-h-screen relative tracking-[0.03em]
 }
+

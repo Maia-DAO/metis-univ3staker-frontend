@@ -1,7 +1,13 @@
 import { IncentivesTable } from "@/components";
 import { useIncentives } from "@/hooks";
+import MonthlyRewards from "@/components/MonthlyRewards/MonthlyRewards";
 
 export default function Home() {
   const [data] = useIncentives();
-  return <IncentivesTable data={data} />;
+  return (
+    <div className="container max-w-screen-xl">
+      <MonthlyRewards />
+      <IncentivesTable data={data} />
+    </div>
+  );
 }

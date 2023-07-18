@@ -34,9 +34,9 @@ export const Table: React.FC<IProps> = ({ columns, data }) => {
   } = tableInstance;
 
   return (
-    <div className="bg-dark-hard rounded-xl p-4 text-white w-full">
+    <div className="bg-dark-gunmetal rounded-xl p-4 text-white w-full shadow-[0px_6px_14px_-3px_rgba(0,_0,_0,_0.25)]">
       <div className="overflow-x-auto">
-        <table {...getTableProps()} className="w-full">
+        <table {...getTableProps()} className="w-full border-separate border-spacing-y-4 table-rounded-td-lg">
           <thead>
             {headerGroups.map((headerGroup, idx) => (
               <tr key={idx} {...headerGroup.getHeaderGroupProps()}>
@@ -47,12 +47,11 @@ export const Table: React.FC<IProps> = ({ columns, data }) => {
                       !column.disabledSorting && column.getSortByToggleProps()
                     )}
                     id={`th_${column?.id}`}
-                    className="px-4 py-2 text-left"
-                  >
-                    <div className="flex items-center gap-1 relative">
-                      <div className="inline-block relative">
+                    className="px-4 py-2">
+                    <div className="flex items-center gap-1 justify-center relative">
+                      <div className="block relative w-full">
                         <span
-                          className={`duration-200 inline-block ${
+                          className={`duration-200 block ${
                             column.isSorted ? "-translate-x-[18px]" : ""
                           }`}
                         >
@@ -79,22 +78,21 @@ export const Table: React.FC<IProps> = ({ columns, data }) => {
             ))}
           </thead>
 
-          <tbody {...getTableBodyProps()}>
+          <tbody {...getTableBodyProps()} >
             {page.map((row, idx) => {
               prepareRow(row);
               return (
                 <tr
                   key={idx}
                   {...row.getRowProps()}
-                  className="bg-dark-light/60"
-                >
+                  className="bg-green-charleston h-16 rounded-lg">
                   {row.cells.map((cell, idx) => {
                     return (
                       <td
                         key={idx}
                         {...cell.getCellProps()}
                         id={`td_${cell.column.id}`}
-                        className="px-4 py-4 text-left"
+                        className="pl-3 pr-4"
                       >
                         {cell.render("Cell")}
                       </td>
