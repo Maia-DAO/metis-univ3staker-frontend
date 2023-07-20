@@ -5,7 +5,7 @@ import { formatBigInt, formatUSD } from '@/utils'
 import { TOKEN_ICONS } from '@/config'
 
 type IncentiveWithDayData = IIncentive & {
-	poolDayData: PoolDayData
+	poolDayData?: PoolDayData
 }
 
 interface IProps {
@@ -36,7 +36,7 @@ const MonthlyRewards: React.FC<IProps> = ({ data }) => {
 								<div className="text-sm text-blue-tiffany ml-auto mr-1">
 									Fees <div className="text-xs contents">(24h)</div>
 								</div>
-								<div className="whitespace-nowrap text-sm text-white">{formatUSD(item.poolDayData.feesUSD * 0.9)}</div>
+								<div className="whitespace-nowrap text-sm text-white">{formatUSD(item.poolDayData?.feesUSD * 0.9)}</div>
 							</div>
 						</div>
 						<Image
