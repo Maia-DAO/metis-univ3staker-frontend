@@ -31,7 +31,6 @@ const Header = () => {
       <span className="ml-auto">
         <ConnectWallet />
       </span>
-
     </header>
   );
 };
