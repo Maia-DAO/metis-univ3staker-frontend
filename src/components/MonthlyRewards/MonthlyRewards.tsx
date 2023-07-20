@@ -1,14 +1,15 @@
 import Image from 'next/image'
 
-import metisToken from '@/../public/tokens/metis-2.svg'
-import usdcToken from '@/../public/tokens/usdc.svg'
-import wethToken from '@/../public/tokens/eth.svg'
-import { IIncentive } from '@/types'
+import { IIncentive, PoolDayData } from '@/types'
 import { formatBigInt, formatUSD } from '@/utils'
 import { TOKEN_ICONS } from '@/config'
 
+type IncentiveWithDayData = IIncentive & {
+	poolDayData: PoolDayData
+}
+
 interface IProps {
-	data?: IIncentive[]
+	data?: IncentiveWithDayData[]
 }
 
 const MonthlyRewards: React.FC<IProps> = ({ data }) => {
