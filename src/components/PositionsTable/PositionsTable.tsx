@@ -1,12 +1,12 @@
-// @ts-nocheck
+//@ts-nocheck
 import { TICK_WIDTH, YEAR } from '@/config/constants/const'
 import { useWeb3 } from '@/hooks'
 import { IIncentive } from '@/types'
-import { formatBigInt, formatDateDiff, formatDateTime, formatDateTimeShort, formatUSD } from '@/utils'
+import { formatBigInt, formatDateDiff, formatDateTimeShort, formatUSD } from '@/utils'
 import Link from 'next/link'
-import { ComponentProps, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Button } from '../Button'
-import { ConnectWallet } from '../ConnectWallet'
+import { ConnectWallet } from '@/components'
 import { Table } from '../Table'
 import { ActionButtons } from './ActionButtons'
 import Image from 'next/image'
@@ -22,22 +22,22 @@ const staticColumns = [
 	{
 		Header: 'NFT',
 		accessor: 'id',
-		Cell: ({ value }) => <p className="text-center text-md">{value}</p>,
+		Cell: ({ value }: any) => <p className="text-md text-center">{value}</p>,
 	},
 	{
 		Header: 'Duration',
 		accessor: 'transaction',
-		Cell: ({ value }) => <p className="text-center text-md">{formatDateDiff(value.timestamp * 1000)}</p>,
+		Cell: ({ value }: any) => <p className="text-md text-center">{formatDateDiff(value.timestamp * 1000)}</p>,
 	},
 ]
 
-const Incentive: React.FC<IProps> = (props) => {
+const SingleIncentive: React.FC<IProps> = (props) => {
 	const { incentive } = props
-	if (!incentive) return null
+	if (!incentive) return <></>
 
 	return (
 		<>
-			<div className="flex self-stretch justify-between">
+			<div className="flex justify-between self-stretch">
 				<div className="text-2xl text-white">Incentive</div>
 				<Link
 					target="_blank"
@@ -53,13 +53,13 @@ const Incentive: React.FC<IProps> = (props) => {
 					<Button className="w-full">Add Liquidity</Button>
 				</Link>
 			</div>
-			<div className="bg-dark-gunmetal rounded-xl p-4 text-white w-full shadow-[0px_6px_14px_-3px_rgba(0,_0,_0,_0.25)]">
+			<div className="mb-8 w-full rounded-xl bg-dark-gunmetal p-4 text-white shadow-[0px_6px_14px_-3px_rgba(0,_0,_0,_0.25)]">
 				<div className="overflow-x-auto">
-					<table role="table" className="w-full border-separate border-spacing-y-4 table-rounded-td-lg">
+					<table role="table" className="table-rounded-td-lg w-full border-separate border-spacing-y-4">
 						<thead>
 							<tr role="row">
-								<th colSpan="1" role="columnheader" className="px-4 py-2">
-									<div className="flex items-center gap-1 justify-start relative">
+								<th colSpan={1} role="columnheader" className="px-4 py-2">
+									<div className="relative flex items-center justify-start gap-1">
 										<div className="">
 											<span className="flex justify-center font-normal text-blue-tiffany/60 hover:text-blue-tiffany/80">
 												<span className="relative">Pool</span>
@@ -67,8 +67,8 @@ const Incentive: React.FC<IProps> = (props) => {
 										</div>
 									</div>
 								</th>
-								<th colSpan="1" role="columnheader" className="px-4 py-2">
-									<div className="flex items-center gap-1 justify-center relative">
+								<th colSpan={1} role="columnheader" className="px-4 py-2">
+									<div className="relative flex items-center justify-center gap-1">
 										<div className="block w-full">
 											<span className="flex justify-center font-normal text-blue-tiffany/60 hover:text-blue-tiffany/80">
 												<span className="relative">Duration</span>
@@ -76,8 +76,8 @@ const Incentive: React.FC<IProps> = (props) => {
 										</div>
 									</div>
 								</th>
-								<th colSpan="1" role="columnheader" className="px-4 py-2">
-									<div className="flex items-center gap-1 justify-center relative">
+								<th colSpan={1} role="columnheader" className="px-4 py-2">
+									<div className="relative flex items-center justify-center gap-1">
 										<div className="block w-full">
 											<span className="flex justify-center font-normal text-blue-tiffany/60 hover:text-blue-tiffany/80">
 												<span className="relative">Min. range</span>
@@ -85,8 +85,8 @@ const Incentive: React.FC<IProps> = (props) => {
 										</div>
 									</div>
 								</th>
-								<th colSpan="1" role="columnheader" className="px-4 py-2">
-									<div className="flex items-center gap-1 justify-center relative">
+								<th colSpan={1} role="columnheader" className="px-4 py-2">
+									<div className="relative flex items-center justify-center gap-1">
 										<div className="block w-full">
 											<span className="flex justify-center font-normal text-blue-tiffany/60 hover:text-blue-tiffany/80">
 												<span className="relative">TVL</span>
@@ -94,8 +94,8 @@ const Incentive: React.FC<IProps> = (props) => {
 										</div>
 									</div>
 								</th>
-								<th colSpan="1" role="columnheader" className="px-4 py-2">
-									<div className="flex items-center gap-1 justify-center relative">
+								<th colSpan={1} role="columnheader" className="px-4 py-2">
+									<div className="relative flex items-center justify-center gap-1">
 										<div className="block w-full">
 											<span className="flex justify-center font-normal text-blue-tiffany/60 hover:text-blue-tiffany/80">
 												<span className="relative">Reward APR</span>
@@ -106,23 +106,23 @@ const Incentive: React.FC<IProps> = (props) => {
 							</tr>
 						</thead>
 						<tbody role="rowgroup">
-							<tr role="row" className="bg-green-charleston h-16 rounded-lg">
+							<tr role="row" className="h-16 rounded-lg bg-green-charleston">
 								<td role="cell" className="pl-3 pr-4">
-									<a className="flex flex-row gap-6 w-full items-center">
-										<div className="relative flex flex-col w-12 shrink-0 items-start">
+									<a className="flex w-full flex-row items-center gap-6">
+										<div className="relative flex w-12 shrink-0 flex-col items-start">
 											<Image
 												src={TOKEN_ICONS[incentive.pool.token0.symbol]}
 												alt="Token icon"
 												width={32}
 												height={32}
-												className="w-8 h-8 z-10 bg-[#262626] rounded-full"
+												className="z-10 h-8 w-8 rounded-full bg-dark-raisin"
 											/>
 											<Image
 												src={TOKEN_ICONS[incentive.pool.token1.symbol]}
 												alt="Token icon"
 												width={32}
 												height={32}
-												className="w-8 h-8 bg-[#262626] rounded-full absolute top-0 left-6"
+												className="absolute left-6 top-0 h-8 w-8 rounded-full bg-dark-raisin"
 											/>
 										</div>
 										<p className="text-md hover:text-white/75">
@@ -132,7 +132,7 @@ const Incentive: React.FC<IProps> = (props) => {
 								</td>
 								<td role="cell" className="pl-3 pr-4">
 									<div>
-										<p className="flex justify-center text-md gap-2">
+										<p className="text-md flex justify-center gap-2">
 											<span>{formatDateTimeShort(incentive.startTime * 1000)}</span> -
 											<span>{formatDateTimeShort(incentive.endTime * 1000)}</span>
 										</p>
@@ -147,10 +147,10 @@ const Incentive: React.FC<IProps> = (props) => {
 									</div>
 								</td>
 								<td role="cell" className="pl-3 pr-4">
-									<p className="text-center text-md">{formatUSD(incentive.pool.totalValueLockedUSD)}</p>
+									<p className="text-md text-center">{formatUSD(incentive.pool.totalValueLockedUSD)}</p>
 								</td>
 								<td role="cell" className="pl-3 pr-4">
-									<p className="text-center text-md">
+									<p className="text-md text-center">
 										{(incentive.tokenPriceUSD > 0 &&
 											incentive.fullRangeLiquidityUSD > 0 &&
 											(
@@ -188,17 +188,17 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 			{
 				Header: 'Value',
 				accessor: 'value',
-				Cell: ({ row: { original: row } }) => <p className="text-center text-md">{formatUSD(row.valueUSD)}</p>,
+				Cell: ({ row: { original: row } }: any) => <p className="text-md text-center">{formatUSD(row.valueUSD)}</p>,
 			},
 			{
 				Header: 'Range',
 				accessor: 'range',
-				Cell: ({ row: { original: row } }) => (
+				Cell: ({ row: { original: row } }: any) => (
 					<>
-						<p className="text-center text-md">
+						<p className="text-md text-center">
 							{((row.tickUpper.tickIdx - row.tickLower.tickIdx) * TICK_WIDTH).toFixed(2)}%
 						</p>
-						<p className="text-center text-md">
+						<p className="text-md text-center">
 							{row.tickUpper.tickIdx - row.tickLower.tickIdx}{' '}
 							{row.tickUpper.tickIdx - row.tickLower.tickIdx == 1 ? 'Tick' : 'Ticks'}
 						</p>
@@ -208,10 +208,10 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 			{
 				Header: 'Rewards',
 				accessor: 'rewards',
-				Cell: ({ row: { original: row } }) =>
+				Cell: ({ row: { original: row } }: { row: { original: any; incentiveRewards: bigint } }) =>
 					!!row.incentive && (
 						<>
-							<p className="text-center text-md">
+							<p className="text-md text-center">
 								{!!row.incentiveRewards && row.incentive.tokenPriceUSD >= 0 ? (
 									formatUSD(
 										formatBigInt(row.incentiveRewards, row.incentive.rewardToken.decimals) *
@@ -221,10 +221,15 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 									<></>
 								)}
 							</p>
-							<p className="text-center text-md">
-								{(!!row.incentiveRewards ? formatBigInt(row.incentiveRewards, row.incentive.rewardToken.decimals) : 0) +
-									' ' +
-									row.incentive.rewardToken.symbol}
+							<p className="text-md flex justify-center gap-1">
+								{!!row.incentiveRewards ? formatBigInt(row.incentiveRewards, row.incentive.rewardToken.decimals) : 0}
+								<Image
+									className="rounded-full bg-dark-raisin"
+									src={TOKEN_ICONS[row.incentive.rewardToken.symbol]}
+									alt={`${row.incentive.rewardToken.symbol.toString()} token`}
+									width={18}
+									height={18}
+								/>
 							</p>
 						</>
 					),
@@ -232,17 +237,17 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 			{
 				Header: 'Stake APR',
 				accessor: 'apr',
-				Cell: ({ row: { original: row } }) =>
+				Cell: ({ row: { original: row } }: { row: any }) =>
 					!!row.incentive &&
 					!!row.incentiveRewards &&
 					row.incentive.tokenPriceUSD >= 0 && (
-						<p className="text-center text-md">
+						<p className="text-md text-center">
 							{(
 								(((row.incentiveRewards / 10 ** row.incentive.rewardToken.decimals) * row.incentive.tokenPriceUSD) /
 									row.valueUSD) *
 								(YEAR /
 									(new Date().getTime() / 1000 -
-										row.stakedIncentives.find((i) => i.incentive.id === row.incentive.id).stakeTime)) *
+										row.stakedIncentives.find((i: any) => i.incentive.id === row.incentive.id).stakeTime)) *
 								100
 							).toFixed(2)}
 							%
@@ -252,7 +257,7 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 			{
 				Header: 'Manage Liquidity',
 				accessor: 'manage',
-				Cell: ({ row: { original } }) => (
+				Cell: ({ row: { original } }: any) => (
 					<div className="flex justify-center">
 						<Link target="_blank" href={`https://uni.maiadao.io/#/pools/${original.id}`}>
 							<Button>Manage Pool</Button>
@@ -264,7 +269,7 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 				Header: '',
 				accessor: 'stake',
 				disableSortBy: true,
-				Cell: ({ row: { original: row } }) =>
+				Cell: ({ row: { original: row } }: any) =>
 					incentive !== null && incentive.minWidth > row.tickUpper.tickIdx - row.tickLower.tickIdx ? (
 						'Position range to low to stake'
 					) : (
@@ -276,12 +281,12 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 	)
 
 	return (
-		<div className="flex flex-col gap-4 justify-center items-center text-white w-full">
-			{title && incentive && <Incentive incentive={incentive} />}
+		<div className="flex w-full flex-col items-center justify-center gap-4 text-white">
+			{title && incentive && <SingleIncentive incentive={incentive} />}
 			{account ? (
 				<>
-					<div className="flex self-stretch justify-between">
-						<div className="text-2xl text-white">{title}</div>
+					<div className="flex justify-between self-stretch">
+						<h1 className="text-left text-xl tracking-wider text-white sm:text-2xl sm:tracking-normal">{title}</h1>
 					</div>
 					<Table columns={columns} data={data || []} />
 				</>

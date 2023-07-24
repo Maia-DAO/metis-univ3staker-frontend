@@ -1,8 +1,7 @@
-//import Footer from "@/components/Footer/Footer";
 import RewardsWarning from '@/components/RewardsWarning/RewardsWarning'
 import { wagmiClient } from '@/config'
 import { useUniswapClient } from '@/hooks/web3'
-import '@/styles/globals.css'
+import '@/styles/globals.scss'
 import { CHAINS } from '@/types'
 import { ApolloProvider } from '@apollo/client'
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
@@ -23,13 +22,12 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
 			<Header />
 			<RewardsWarning />
 			<main className="flex flex-col items-center py-12">
-				{children}
+				<div className="container max-w-screen-xl px-4 xl:px-0">{children}</div>
 				<div
-					className={`w-[336px] h-[286px] bg-[#D3D3D3 / 50] bg-center bg-no-repeat opacity-90 absolute left-0 bottom-8 -z-10 mix-blend-lighten`}
+					className={`absolute bottom-8 left-0 -z-10 h-[286px] w-[336px] bg-center bg-no-repeat opacity-90 mix-blend-lighten`}
 					style={{ backgroundImage: `url(${coin.src})` }}
 				/>
 			</main>
-			{/*<Footer />*/}
 		</ApolloProvider>
 	)
 }

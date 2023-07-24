@@ -16,11 +16,7 @@ export const StakePage: NextPage<IProps> = ({ incentiveId }) => {
 		positions: [userPoolPositions],
 	} = useUserIncentivePositions(incentive)
 
-	return (
-		<div className="container max-w-screen-xl">
-			<PositionsTable data={userPoolPositions} incentive={incentive} />
-		</div>
-	)
+	return <PositionsTable data={userPoolPositions} incentive={incentive} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

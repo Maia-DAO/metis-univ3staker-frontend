@@ -5,8 +5,10 @@
 @tailwind utilities;
 
 @layer components {
-    .table-rounded-td-lg tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem;}
-    .table-rounded-td-lg tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem;}
+    .table-rounded-td-lg tr {
+        td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem;}
+        td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem;}
+    }
 }
 
 body {

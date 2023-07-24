@@ -9,11 +9,7 @@ const PositionsTable = dynamic(() => import('@/components/PositionsTable'), {
 export const RewardsPage: NextPage = () => {
 	const [data] = useUserStakedPositions()
 
-	return (
-		<div className="container max-w-screen-xl">
-			<PositionsTable data={data} title="My Deposited Positions" />
-		</div>
-	)
+	return <PositionsTable data={data} title="My Deposited Positions" />
 }
 
 export default RewardsPage

@@ -1,10 +1,15 @@
 // @ts-nocheck
 import { BsArrowDownShort, BsArrowLeftShort, BsArrowRightShort, BsArrowUpShort } from 'react-icons/bs'
 import { usePagination, useSortBy, useTable } from 'react-table'
+import { ToggleSwitch, IToggleProps } from '@/components'
+import { useState } from 'react'
+import { Accordion } from '@/components'
 
 interface IProps {
 	data: any[]
 	columns: any[]
+	showFilterButton?: boolean
+	className?: string
 }
 
 const TableHeader = ({ headers, idx }) => {
@@ -39,10 +44,10 @@ const ColumnContent = ({ column, currentHeader }) => {
 					<span className="relative">
 						{currentHeader}
 						<span
-							className={`absolute duration-200 top-1/2 -translate-y-1/2 -right-1 ${
+							className={`absolute -right-1 top-1/2 -translate-y-1/2 duration-200 ${
 								column.isSorted
-									? 'translate-x-5 opacity-100 pointer-events-auto'
-									: 'translate-x-0 opacity-0 pointer-events-none'
+									? 'pointer-events-auto translate-x-5 opacity-100'
+									: 'pointer-events-none translate-x-0 opacity-0'
 							}`}>
 							{column.isSortedDesc ? <BsArrowDownShort size={22} /> : <BsArrowUpShort size={22} />}
 						</span>
@@ -55,10 +60,10 @@ const ColumnContent = ({ column, currentHeader }) => {
 
 const TableRow = ({ row }) => {
 	return (
-		<tr {...row.getRowProps()} className="bg-green-charleston h-16 rounded-lg">
+		<tr {...row.getRowProps()} className="h-16 rounded-lg">
 			{row.cells.map((cell, idx) => {
 				return (
-					<td key={idx} {...cell.getCellProps()} id={`td_${cell.column.id}`} className="pl-3 pr-4">
+					<td key={idx} {...cell.getCellProps()} id={`td_${cell.column.id}`} className="bg-green-charleston pl-3 pr-3">
 						{cell.render('Cell')}
 					</td>
 				)
@@ -67,12 +72,27 @@ const TableRow = ({ row }) => {
 	)
 }
 
-export const Table: React.FC<IProps> = ({ columns, data }) => {
+const FilterButton = ({ showFilterButton, onChange, label, checked }: { showFilterButton: boolean } & IToggleProps) => {
+	if (!showFilterButton) {
+		return null
+	}
+
+	return (
+		<div className="relative w-full pb-2">
+			<div className="absolute left-0">
+				<ToggleSwitch onChange={onChange} checked={checked} label={label} />
+			</div>
+		</div>
+	)
+}
+
+export const Table: React.FC<IProps> = ({ columns, data, showFilterButton, className }) => {
 	const tableInstance = useTable(
 		{ columns, data, initialState: { pageIndex: 0, pageSize: 5 } },
 		useSortBy,
 		usePagination,
 	)
+	const [filterActive, setFilterActive] = useState(true)
 
 	const {
 		getTableProps,
@@ -89,9 +109,20 @@ export const Table: React.FC<IProps> = ({ columns, data }) => {
 	} = tableInstance
 
 	return (
-		<div className="bg-dark-gunmetal rounded-xl p-4 text-white w-full shadow-[0px_6px_14px_-3px_rgba(0,_0,_0,_0.25)]">
+		<div className="w-full rounded-xl bg-dark-gunmetal p-4 text-white shadow-[0px_6px_14px_-3px_rgba(0,_0,_0,_0.25)]">
+			<div className="px-3">
+				<FilterButton
+					showFilterButton={showFilterButton}
+					onChange={() => setFilterActive(!filterActive)}
+					checked={filterActive}
+					label="Active only"
+				/>
+			</div>
+
 			<div className="overflow-x-auto">
-				<table {...getTableProps()} className="w-full border-separate border-spacing-y-4 table-rounded-td-lg">
+				<table
+					{...getTableProps()}
+					className={`table-rounded-td-lg w-full border-separate border-spacing-y-4 ${className}`}>
 					<thead>
 						{headerGroups.map((headerGroup, idx) => (
 							<TableHeader headers={headerGroup} key={idx} />
@@ -101,25 +132,28 @@ export const Table: React.FC<IProps> = ({ columns, data }) => {
 					<tbody {...getTableBodyProps()}>
 						{page.map((row, idx) => {
 							prepareRow(row)
+							if (filterActive && Date.now() > row.original.endTime * 1000) {
+								return null
+							}
+
 							return <TableRow row={row} key={idx} />
 						})}
 					</tbody>
 				</table>
 			</div>
-
-			<div className="space-x-1 flex justify-center items-center pb-3 mt-2">
+			<div className="mt-2 flex items-center justify-center space-x-1 pb-3">
 				<button
-					className="text-darkOrange disabled:text-dark/20 dark:disabled:text-white/40 p-1"
+					className="text-darkOrange disabled:text-dark/20 p-1 dark:disabled:text-white/40"
 					onClick={() => previousPage()}
 					disabled={!canPreviousPage}>
 					<BsArrowLeftShort size={24} />
 				</button>
 
-				<span className="text-sm text-dark/70 dark:text-white/70">
+				<span className="text-dark/70 text-sm dark:text-white/70">
 					Page {Math.min(pageIndex + 1, pageOptions.length)} of {pageOptions.length}
 				</span>
 				<button
-					className="text-darkOrange disabled:text-dark/20 dark:disabled:text-white/40 p-1"
+					className="text-darkOrange disabled:text-dark/20 p-1 dark:disabled:text-white/40"
 					onClick={() => nextPage()}
 					disabled={!canNextPage}>
 					<BsArrowRightShort size={24} />

@@ -1,6 +1,9 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
 import { Button } from '@/components'
+import metis from '@/../public/tokens/metis-2.svg'
+import chevron from '@/../public/chevron.svg'
+
 export const ConnectWallet = () => {
 	return (
 		<ConnectButton.Custom>
@@ -12,11 +15,7 @@ export const ConnectWallet = () => {
 					<div
 						{...(!ready && {
 							'aria-hidden': true,
-							style: {
-								opacity: 0,
-								pointerEvents: 'none',
-								userSelect: 'none',
-							},
+							className: 'opacity-0 pointer-events-none user-select-none',
 						})}>
 						{(() => {
 							if (!connected) {
@@ -34,28 +33,18 @@ export const ConnectWallet = () => {
 								)
 							}
 							return (
-								<div style={{ display: 'flex', gap: 12 }}>
-									<button onClick={openChainModal} style={{ display: 'flex', alignItems: 'center' }} type="button">
-										{chain.hasIcon && (
-											<div
-												style={{
-													background: chain.iconBackground,
-													width: 12,
-													height: 12,
-													borderRadius: 999,
-													overflow: 'hidden',
-													marginRight: 4,
-												}}>
-												{chain.iconUrl && (
-													<Image
-														alt={chain.name ?? 'Chain icon'}
-														src={chain.iconUrl}
-														style={{ width: 12, height: 12 }}
-													/>
-												)}
-											</div>
-										)}
-										{chain.name}
+								<div className="bg-green-charleston rounded-3xl text-white text-sm font-medium py-1.5 px-3 border-blue-tiffany/30 border-[1px] hover:border-blue-tiffany/80 flex gap-3">
+									<button onClick={openChainModal} className="flex items-center" type="button">
+										<div className="flex items-center gap-1.5 justify-center relative mr-1">
+											<Image
+												className="bg-dark-raisin rounded-full"
+												alt="Metis Icon"
+												src={metis}
+												width={26}
+												height={26}
+											/>
+											<Image className="rotate-90" alt="Chevron Icon" src={chevron} width={13} height={13} />
+										</div>
 									</button>
 									<button onClick={openAccountModal} type="button">
 										{account.displayName}

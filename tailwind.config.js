@@ -20,7 +20,7 @@ module.exports = {
 				},
 				blue: {
 					tiffany: '#18CAB9',
-					yankees: '#1a2d42',
+					yankees: '#1a2d42', // used in the background
 				},
 
 				dark: {
@@ -31,6 +31,7 @@ module.exports = {
 					purple: '#320930',
 					turquoise: '#00DACC',
 					crayola: '#313042',
+					raisin: '#262626',
 				},
 			},
 		},
