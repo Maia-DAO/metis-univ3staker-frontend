@@ -7,11 +7,13 @@ export default function Home() {
 	return (
 		<>
 			<MonthlyRewards data={data} />
-			<div className="hidden xl:block">
+			<div className="hidden lg:block">
 				<IncentivesTable data={data} />
 			</div>
 
-			<IncentivesTableMobile data={data} />
+			<div className="lg:hidden">
+				<IncentivesTableMobile data={data} />
+			</div>
 		</>
 	)
 }
