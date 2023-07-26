@@ -16,7 +16,6 @@ const TableRow = ({ row }) => {
 	return (
 		<div className="flex flex-col gap-3 rounded-lg bg-green-charleston px-3 pb-2 pt-4">
 			{row.cells.map((cell, idx) => {
-				console.log(cell)
 				return (
 					<div key={idx} {...cell.getCellProps()} id={`tmd_${cell.column.id}`} className="flex justify-between">
 						<span className="text-sm text-blue-tiffany/80">{cell.render('Header')}</span>

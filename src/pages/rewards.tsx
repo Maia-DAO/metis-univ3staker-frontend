@@ -6,10 +6,19 @@ const PositionsTable = dynamic(() => import('@/components/PositionsTable'), {
 	ssr: false,
 })
 
+const PositionMobileTable = dynamic(() => import('@/components/PositionsTable/PositionsMobileTable'), {
+	ssr: false,
+})
+
 export const RewardsPage: NextPage = () => {
 	const [data] = useUserStakedPositions()
 
-	return <PositionsTable data={data} title="My Deposited Positions" />
+	return (
+		<>
+			<PositionsTable data={data} title="My Deposited Positions" />
+			<PositionMobileTable data={data} title="My Deposited Positions" />
+		</>
+	)
 }
 
 export default RewardsPage

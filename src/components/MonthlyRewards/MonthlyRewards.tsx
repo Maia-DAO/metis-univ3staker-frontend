@@ -14,11 +14,11 @@ interface IProps {
 
 const MonthlyRewards: React.FC<IProps> = ({ data }) => {
 	return (
-		<div className="mb-8 flex flex-col items-start gap-14">
+		<div className="flex flex-col items-start gap-14 sm:mb-8">
 			<h2 className="text-left text-xl tracking-wider text-white sm:text-2xl sm:tracking-normal">
 				Monthly Rewards And Fees
 			</h2>
-			<div className="mb-5 flex flex-row flex-wrap items-center justify-around gap-y-12 self-stretch sm:flex-nowrap sm:gap-[26px] xl:justify-start">
+			<div className="mb-5 flex flex-row flex-wrap items-center justify-evenly gap-y-12 self-stretch sm:flex-nowrap sm:gap-[26px] lg:justify-start">
 				{data?.map((item, idx) => {
 					if (Date.now() > item.endTime * 1000) {
 						return null

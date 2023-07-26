@@ -7,7 +7,7 @@ const DropdownContent = ({ subItems, open }: { subItems: NavItem[]; open: boolea
 		<ul
 			className={`${
 				open ? 'flex' : 'hidden'
-			} absolute -right-2.5 bottom-[100%] w-max flex-col gap-4 rounded border-[#551551] bg-dark-purple p-2.5 sm:-left-2.5 sm:bottom-0 sm:right-auto sm:top-[100%]`}>
+			} absolute -right-2.5 bottom-[100%] h-fit w-max flex-col gap-4 rounded border-[#551551] bg-dark-purple p-2.5 sm:-left-2.5 sm:bottom-0 sm:right-auto sm:top-[100%]`}>
 			{subItems.map((item, idx) => (
 				<li key={idx}>
 					<Link href={item.href!} className="cursor-pointer p-2 text-base text-white hover:text-blue-tiffany">

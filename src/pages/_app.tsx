@@ -21,10 +21,10 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
 		<ApolloProvider client={client}>
 			<Header />
 			<RewardsWarning />
-			<main className="flex flex-col items-center py-12">
+			<main className="flex flex-col items-center pb-16 pt-8 lg:py-12">
 				<div className="container max-w-screen-xl px-4 xl:px-0">{children}</div>
 				<div
-					className={`absolute bottom-8 left-0 -z-10 h-[286px] w-[336px] bg-center bg-no-repeat opacity-90 mix-blend-lighten`}
+					className={`absolute left-0 top-[calc(95vh)] -z-10 h-[286px] w-[336px] -translate-y-full bg-center bg-no-repeat opacity-90 mix-blend-lighten`}
 					style={{ backgroundImage: `url(${coin.src})` }}
 				/>
 			</main>

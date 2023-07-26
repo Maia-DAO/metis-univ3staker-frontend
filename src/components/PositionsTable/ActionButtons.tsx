@@ -6,9 +6,11 @@ import { Button } from '../Button'
 interface IProps {
 	incentive?: IIncentive
 	position: IPosition
+	className?: string
+	format?: 'big'
 }
 
-export const ActionButtons: React.FC<IProps> = ({ position, incentive }) => {
+export const ActionButtons: React.FC<IProps> = ({ position, incentive, className, format }) => {
 	const unstakeInput = useMemo(
 		() =>
 			!!incentive
@@ -26,21 +28,29 @@ export const ActionButtons: React.FC<IProps> = ({ position, incentive }) => {
 	const isStakedInIncentive = position.stakedIncentives.find((i: any) => i.incentive?.id === incentive?.id)
 
 	return (
-		<div className="flex justify-center gap-4">
+		<div className={className ?? 'flex justify-center gap-4'}>
 			{isStakedInIncentive ? (
 				<>
-					<Button onClick={() => onClaim(position.id)}>Claim</Button>
-					<Button onClick={() => onUnstake(position.id)}>Unstake & Claim</Button>
+					<Button format={format} onClick={() => onClaim(position.id)}>
+						Claim
+					</Button>
+					<Button format={format} onClick={() => onUnstake(position.id)}>
+						Unstake & Claim
+					</Button>
 				</>
 			) : position.deposited ? (
 				<>
 					{hasExpired || (!!incentive && <Button onClick={() => onStake(position.id)}>Stake</Button>)}
-					<Button onClick={() => onWithdraw(position.id)}>Withdraw</Button>
+					<Button format={format} onClick={() => onWithdraw(position.id)}>
+						Withdraw
+					</Button>
 				</>
 			) : hasExpired ? (
 				<p>The incentive has ended</p>
 			) : (
-				<Button onClick={() => onDepositStake(position.id)}>Stake</Button>
+				<Button format={format} onClick={() => onDepositStake(position.id)}>
+					Stake
+				</Button>
 			)}
 		</div>
 	)

@@ -48,8 +48,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 						incentive.pool.token1.id +
 						'/' +
 						incentive.pool.feeTier
-					}
-					className="col-start-5">
+					}>
 					<Button className="w-full">Add Liquidity</Button>
 				</Link>
 			</div>
@@ -106,8 +105,8 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 							</tr>
 						</thead>
 						<tbody role="rowgroup">
-							<tr role="row" className="h-16 rounded-lg bg-green-charleston">
-								<td role="cell" className="pl-3 pr-4">
+							<tr role="row" className="h-16 rounded-lg">
+								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<a className="flex w-full flex-row items-center gap-6">
 										<div className="relative flex w-12 shrink-0 flex-col items-start">
 											<Image
@@ -130,7 +129,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 										</p>
 									</a>
 								</td>
-								<td role="cell" className="pl-3 pr-4">
+								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<div>
 										<p className="text-md flex justify-center gap-2">
 											<span>{formatDateTimeShort(incentive.startTime * 1000)}</span> -
@@ -138,7 +137,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 										</p>
 									</div>
 								</td>
-								<td role="cell" className="pl-3 pr-4">
+								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<div className="text-center">
 										<p className="text-md">±{incentive.minWidth * TICK_WIDTH}%</p>
 										<p className="text-md">
@@ -146,10 +145,10 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 										</p>
 									</div>
 								</td>
-								<td role="cell" className="pl-3 pr-4">
+								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<p className="text-md text-center">{formatUSD(incentive.pool.totalValueLockedUSD)}</p>
 								</td>
-								<td role="cell" className="pl-3 pr-4">
+								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<p className="text-md text-center">
 										{(incentive.tokenPriceUSD > 0 &&
 											incentive.fullRangeLiquidityUSD > 0 &&
@@ -281,7 +280,7 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 	)
 
 	return (
-		<div className="flex w-full flex-col items-center justify-center gap-4 text-white">
+		<div className="hidden w-full flex-col items-center justify-center gap-4 text-white sm:flex">
 			{title && incentive && <SingleIncentive incentive={incentive} />}
 			{account ? (
 				<>
