@@ -1,23 +1,21 @@
-// @ts-nocheck
-import { TICK_WIDTH, YEAR } from '@/config/constants/const'
+//@ts-nocheck
+import { MobileTable } from '@/components/Table/MobileTable'
 import { IIncentive } from '@/types'
-import { formatBigInt, formatDateTime, formatUSD } from '@/utils'
 import Link from 'next/link'
-import { Button } from '../Button'
-import { Table } from '../Table'
-import Image from 'next/image'
 import { TOKEN_ICONS } from '@/config'
-import check from '../../../public/check.svg'
+import { TICK_WIDTH, YEAR } from '@/config/constants/const'
+import { formatBigInt, formatUSD } from '@/utils'
 import xIcon from '@/../public/x.svg'
-import chevronDown from '@/../public/chevron.svg'
-
+import check from '@/../public/check.svg'
+import Image from 'next/image'
+import { Button } from '../Button'
 interface IProps {
 	data?: IIncentive[]
 }
 
 const columns = [
 	{
-		Header: 'Pool',
+		Header: '',
 		accessor: 'pool',
 		Cell: ({ value: pool, row: { original } }) => (
 			<Link href={`/${original.id}`} className="flex w-full flex-row items-center gap-6">
@@ -47,9 +45,9 @@ const columns = [
 		Header: 'Min. range',
 		accessor: 'minWidth',
 		Cell: ({ row: { original: row } }) => (
-			<div className="text-center">
-				<p className="text-md">±{row.minWidth * TICK_WIDTH}%</p>
-				<p className="text-md">
+			<div className="text-right">
+				<p className="text-sm">±{row.minWidth * TICK_WIDTH}%</p>
+				<p className="text-sm">
 					{row.minWidth} {row.minWidth == 1 ? 'Tick' : 'Ticks'}
 				</p>
 			</div>
@@ -59,7 +57,7 @@ const columns = [
 		Header: 'TVL',
 		accessor: 'tvl',
 		Cell: ({ row: { original: row } }) => (
-			<p className="text-md text-center">{formatUSD(row.pool.totalValueLockedUSD)}</p>
+			<p className="text-right text-sm">{formatUSD(row.pool.totalValueLockedUSD)}</p>
 		),
 	},
 	{
@@ -67,7 +65,7 @@ const columns = [
 		accessor: 'rewardapr',
 		Cell: ({ row: { original: row } }) => (
 			<>
-				<p className="text-md text-center">
+				<p className="text-right text-sm">
 					{(row.tokenPriceUSD > 0 &&
 						row.fullRangeLiquidityUSD > 0 &&
 						(
@@ -95,7 +93,7 @@ const columns = [
 		accessor: 'feeapr',
 		Cell: ({ row: { original: row } }) => (
 			<>
-				<p className="text-md text-center">
+				<p className="text-right text-sm">
 					{(row.poolDayData.feesUSD > 0 &&
 						row.fullRangeLiquidityUSD > 0 &&
 						(((row.poolDayData.feesUSD * 0.9 * 365) / row.fullRangeLiquidityUSD) * 100).toFixed(2)) ||
@@ -116,7 +114,7 @@ const columns = [
 		Cell: ({ row: { original: row } }) => {
 			const now = Date.now()
 			if (now < row.startTime * 1000) {
-				return <p className="text-md text-center">Upcoming</p>
+				return <p className="text-right text-sm">Upcoming</p>
 			}
 			if (now > row.endTime * 1000) {
 				return (
@@ -137,29 +135,20 @@ const columns = [
 		accessor: 'link',
 		disabledSorting: true,
 		Cell: ({ row: { original } }) => (
-			<Link href={`/${original.id}`}>
-				<Button className="group">
-					<span className="text-md leading-tight">Stake</span>
-					<Image
-						className="duration-75 group-hover:translate-x-0.5"
-						src={chevronDown}
-						alt="Chevron right"
-						height={16}
-						width={16}
-					/>
+			<Link className="mt-2 w-full" href={`/${original.id}`}>
+				<Button className="group w-full" format="big">
+					<span className="text-md font-medium leading-tight">Stake</span>
 				</Button>
 			</Link>
 		),
 	},
 ]
 
-export const IncentivesTable: React.FC<IProps> = ({ data }) => {
+export const IncentivesTableMobile: React.FC<IProps> = ({ data }) => {
 	return (
 		<div className="flex w-full flex-col justify-center gap-4 text-white">
-			<h5 className="text-left text-2xl text-white">Incentives</h5>
-			<Table columns={columns} data={data || []} showFilterButton={true} />
+			<h5 className="text-left text-xl tracking-wider text-white sm:text-2xl sm:tracking-normal">Incentives</h5>
+			<MobileTable columns={columns} data={data || []} showFilterButton={true} />
 		</div>
 	)
 }
-
-export default IncentivesTable
