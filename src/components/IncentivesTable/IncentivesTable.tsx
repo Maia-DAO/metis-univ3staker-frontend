@@ -65,30 +65,39 @@ const columns = [
 	{
 		Header: 'Reward APR',
 		accessor: 'rewardapr',
-		Cell: ({ row: { original: row } }) => (
-			<>
-				<p className="text-md text-center">
-					{(row.tokenPriceUSD > 0 &&
-						row.fullRangeLiquidityUSD > 0 &&
-						(
-							((formatBigInt(row.reward) * row.tokenPriceUSD) / row.fullRangeLiquidityUSD) *
-							(YEAR / (row.endTime - row.startTime)) *
-							100
-						).toFixed(2)) ||
-						0}
-					% -{' '}
-					{(row.tokenPriceUSD > 0 &&
-						row.activeLiqudityUSD > 0 &&
-						(
-							((formatBigInt(row.reward) * row.tokenPriceUSD) / row.activeLiqudityUSD) *
-							(YEAR / (row.endTime - row.startTime)) *
-							100
-						).toFixed(2)) ||
-						0}
-					%
-				</p>
-			</>
-		),
+		Cell: ({ row: { original: row } }) => {
+			const now = Date.now()
+			return (
+				<>
+					<p className="text-md text-center">
+						{now > row.endTime * 1000 ? (
+							<>0%</>
+						) : (
+							<>
+								{(row.tokenPriceUSD > 0 &&
+									row.fullRangeLiquidityUSD > 0 &&
+									(
+										((formatBigInt(row.reward) * row.tokenPriceUSD) / row.fullRangeLiquidityUSD) *
+										(YEAR / (row.endTime - row.startTime)) *
+										100
+									).toFixed(2)) ||
+									0}
+								% -{' '}
+								{(row.tokenPriceUSD > 0 &&
+									row.activeLiqudityUSD > 0 &&
+									(
+										((formatBigInt(row.reward) * row.tokenPriceUSD) / row.activeLiqudityUSD) *
+										(YEAR / (row.endTime - row.startTime)) *
+										100
+									).toFixed(2)) ||
+									0}
+								%
+							</>
+						)}
+					</p>
+				</>
+			)
+		},
 	},
 	{
 		Header: 'Fee APR',
