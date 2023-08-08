@@ -30,6 +30,36 @@ interface IProps {
 	incentive?: IIncentive
 }
 
+const renderRewardApr = (incentive: IIncentive) => {
+	const now = Date.now()
+	if (now > incentive.endTime * 1000) {
+		return <>0%</>
+	}
+
+	return (
+		<>
+			{(incentive.tokenPriceUSD > 0 &&
+				incentive.fullRangeLiquidityUSD > 0 &&
+				(
+					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
+					(YEAR / (incentive.endTime - incentive.startTime)) *
+					100
+				).toFixed(2)) ||
+				0}
+			% -{' '}
+			{(incentive.tokenPriceUSD > 0 &&
+				incentive.activeLiqudityUSD > 0 &&
+				(
+					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
+					(YEAR / (incentive.endTime - incentive.startTime)) *
+					100
+				).toFixed(2)) ||
+				0}
+			%
+		</>
+	)
+}
+
 const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
 	if (!incentive) return <></>
 
@@ -97,27 +127,8 @@ const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
 							<p className="text-center text-sm">{formatUSD(incentive.pool.totalValueLockedUSD)}</p>
 						</div>
 						<div className="flex justify-between">
-							<span className="text-sm text-blue-tiffany/80">Value</span>
-							<p className="text-center text-sm">
-								{(incentive.tokenPriceUSD > 0 &&
-									incentive.fullRangeLiquidityUSD > 0 &&
-									(
-										((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
-										(YEAR / (incentive.endTime - incentive.startTime)) *
-										100
-									).toFixed(2)) ||
-									0}
-								% -{' '}
-								{(incentive.tokenPriceUSD > 0 &&
-									incentive.activeLiqudityUSD > 0 &&
-									(
-										((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
-										(YEAR / (incentive.endTime - incentive.startTime)) *
-										100
-									).toFixed(2)) ||
-									0}
-								%
-							</p>
+							<span className="text-sm text-blue-tiffany/80">Reward APR</span>
+							<p className="text-center text-sm">{renderRewardApr(incentive)}</p>
 						</div>
 					</div>
 				</div>

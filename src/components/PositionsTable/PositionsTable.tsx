@@ -31,6 +31,36 @@ const staticColumns = [
 	},
 ]
 
+const renderRewardApr = (incentive: IIncentive) => {
+	const now = Date.now()
+	if (now > incentive.endTime * 1000) {
+		return <>0%</>
+	}
+
+	return (
+		<>
+			{(incentive.tokenPriceUSD > 0 &&
+				incentive.fullRangeLiquidityUSD > 0 &&
+				(
+					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
+					(YEAR / (incentive.endTime - incentive.startTime)) *
+					100
+				).toFixed(2)) ||
+				0}
+			% -{' '}
+			{(incentive.tokenPriceUSD > 0 &&
+				incentive.activeLiqudityUSD > 0 &&
+				(
+					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
+					(YEAR / (incentive.endTime - incentive.startTime)) *
+					100
+				).toFixed(2)) ||
+				0}
+			%
+		</>
+	)
+}
+
 const SingleIncentive: React.FC<IProps> = (props) => {
 	const { incentive } = props
 	if (!incentive) return <></>
@@ -149,26 +179,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 									<p className="text-md text-center">{formatUSD(incentive.pool.totalValueLockedUSD)}</p>
 								</td>
 								<td role="cell" className="bg-green-charleston pl-3 pr-4">
-									<p className="text-md text-center">
-										{(incentive.tokenPriceUSD > 0 &&
-											incentive.fullRangeLiquidityUSD > 0 &&
-											(
-												((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
-												(YEAR / (incentive.endTime - incentive.startTime)) *
-												100
-											).toFixed(2)) ||
-											0}
-										% -{' '}
-										{(incentive.tokenPriceUSD > 0 &&
-											incentive.activeLiqudityUSD > 0 &&
-											(
-												((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
-												(YEAR / (incentive.endTime - incentive.startTime)) *
-												100
-											).toFixed(2)) ||
-											0}
-										%
-									</p>
+									<p className="text-md text-center">{renderRewardApr(incentive)}</p>
 								</td>
 							</tr>
 						</tbody>
