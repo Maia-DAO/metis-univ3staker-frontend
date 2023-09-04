@@ -88,7 +88,7 @@ const FilterButton = ({ showFilterButton, onChange, label, checked }: { showFilt
 
 export const Table: React.FC<IProps> = ({ columns, data, showFilterButton, className }) => {
 	const tableInstance = useTable(
-		{ columns, data, initialState: { pageIndex: 0, pageSize: 5 } },
+		{ columns, data, initialState: { pageIndex: 0, pageSize: 20 } },
 		useSortBy,
 		usePagination,
 	)

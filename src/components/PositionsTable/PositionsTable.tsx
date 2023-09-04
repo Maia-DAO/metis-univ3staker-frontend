@@ -72,7 +72,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 				<Link
 					target="_blank"
 					href={
-						'https://uni.maiadao.io/#/add/' +
+						'https://v3.maiadao.io/#/add/' +
 						incentive.pool.token0.id +
 						'/' +
 						incentive.pool.token1.id +
@@ -269,7 +269,7 @@ export const PositionsTable: React.FC<IProps> = ({ data, incentive = null, title
 				accessor: 'manage',
 				Cell: ({ row: { original } }: any) => (
 					<div className="flex justify-center">
-						<Link target="_blank" href={`https://uni.maiadao.io/#/pools/${original.id}`}>
+						<Link target="_blank" href={`https://v3.maiadao.io/#/pools/${original.id}`}>
 							<Button>Manage Pool</Button>
 						</Link>
 					</div>
