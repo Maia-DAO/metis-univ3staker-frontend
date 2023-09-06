@@ -19,7 +19,7 @@ export function getLargerInTicks(
 ): number {
   return Math.max(
     tickSpacing,
-    (Math.floor(minWidth / tickSpacing) + 1) * tickSpacing
+    Math.ceil(minWidth / tickSpacing) * tickSpacing
   );
 }
 
