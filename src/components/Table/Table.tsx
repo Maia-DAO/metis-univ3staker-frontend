@@ -3,8 +3,6 @@ import { BsArrowDownShort, BsArrowLeftShort, BsArrowRightShort, BsArrowUpShort }
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ToggleSwitch, IToggleProps } from '@/components'
 import { useState } from 'react'
-import { Accordion } from '@/components'
-
 interface IProps {
 	data: any[]
 	columns: any[]
