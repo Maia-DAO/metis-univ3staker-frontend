@@ -25,7 +25,7 @@ export const ActionButtons: React.FC<IProps> = ({ position, incentive, className
 	const onWithdraw = useWithdraw()
 	const hasExpired = incentive?.endTime * 1000 <= Date.now()
 
-	const isStakedInIncentive = position.stakedIncentives.find((i: any) => i.incentive?.id === incentive?.id)
+	const isStakedInIncentive = position?.stakedIncentives?.find((i: any) => i.incentive?.id === incentive?.id)
 
 	return (
 		<div className={className ?? 'flex justify-center gap-4'}>
