@@ -58,12 +58,19 @@ export const useUserPositions = (poolId?: string) => {
   const { data: poolData, loading } = useGetPositionsQuery({
     variables: {
       where: {
-        or: [
+        and: [
           {
-            ...(poolId === undefined ? undefined : { pool: poolId }),
-            owner: address || "",
+            liquidity_not: 0,
           },
-          { id_in },
+          {
+            or: [
+              {
+                ...(poolId === undefined ? undefined : { pool: poolId }),
+                owner: address || "",
+              },
+              { id_in },
+            ],
+          }
         ],
       },
     },
