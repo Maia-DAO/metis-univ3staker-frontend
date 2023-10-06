@@ -116,7 +116,7 @@ const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
 						<div className="flex justify-between">
 							<span className="text-sm text-blue-tiffany/80">Min. range</span>
 							<div className="flex flex-col items-end">
-								<p className="text-sm">±{incentive.minWidth * TICK_WIDTH}%</p>
+								<p className="text-sm">{incentive.minWidth * TICK_WIDTH}%</p>
 								<p className="text-sm">
 									{incentive.minWidth} {incentive.minWidth == 1 ? 'Tick' : 'Ticks'}
 								</p>
