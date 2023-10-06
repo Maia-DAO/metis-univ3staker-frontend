@@ -169,7 +169,7 @@ const SingleIncentive: React.FC<IProps> = (props) => {
 								</td>
 								<td role="cell" className="bg-green-charleston pl-3 pr-4">
 									<div className="text-center">
-										<p className="text-md">±{incentive.minWidth * TICK_WIDTH}%</p>
+										<p className="text-md">{incentive.minWidth * TICK_WIDTH}%</p>
 										<p className="text-md">
 											{incentive.minWidth} {incentive.minWidth == 1 ? 'Tick' : 'Ticks'}
 										</p>

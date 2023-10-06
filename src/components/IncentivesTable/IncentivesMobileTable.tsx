@@ -46,7 +46,7 @@ const columns = [
 		accessor: 'minWidth',
 		Cell: ({ row: { original: row } }) => (
 			<div className="text-right">
-				<p className="text-sm">±{row.minWidth * TICK_WIDTH}%</p>
+				<p className="text-sm">{row.minWidth * TICK_WIDTH}%</p>
 				<p className="text-sm">
 					{row.minWidth} {row.minWidth == 1 ? 'Tick' : 'Ticks'}
 				</p>

@@ -18,7 +18,7 @@ const MonthlyRewards: React.FC<IProps> = ({ data }) => {
 			<h2 className="text-left text-xl tracking-wider text-white sm:text-2xl sm:tracking-normal">
 				Monthly Rewards And Fees
 			</h2>
-			<div className="mb-5 flex flex-row flex-wrap items-center justify-evenly gap-y-12 self-stretch sm:flex-nowrap sm:gap-[26px] lg:justify-start">
+			<div className="mb-5 flex flex-row flex-wrap items-center justify-evenly gap-[26px] gap-y-12 self-stretch md:grid md:grid-cols-2 md:grid-rows-2 md:items-center md:justify-start xl:flex">
 				{data?.map((item, idx) => {
 					if (Date.now() > item.endTime * 1000) {
 						return null
