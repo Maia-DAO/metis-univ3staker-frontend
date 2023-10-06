@@ -1,153 +1,166 @@
-import { ZERO_ADDRESS } from "@/config/constants/const";
+import { ZERO_ADDRESS } from '@/config/constants/const'
 import {
-  IIncentive,
-  IPosition,
-  IStakedPosition,
-  useGetEthPriceQuery,
-  useGetPositionsQuery,
-  useGetStakerPositionsQuery,
-} from "@/types";
-import { getPositionAmounts } from "@/utils/positions";
-import { useMemo } from "react";
-import { getAddress } from "viem";
-import { useIncentives } from "./incentives";
-import { useIncentiveRewards } from "./stake";
-import { useGraphClient, useWeb3 } from "./web3";
+	IIncentive,
+	IPosition,
+	IStakedPosition,
+	useGetEthPriceQuery,
+	useGetPositionsQuery,
+	useGetStakerPositionsQuery,
+} from '@/types'
+import { getPositionAmounts } from '@/utils/positions'
+import { useMemo } from 'react'
+import { getAddress } from 'viem'
+import { useIncentives } from './incentives'
+import { useIncentiveRewards } from './stake'
+import { useGraphClient, useWeb3 } from './web3'
 
-export const useUserIncentivePositions = (
-  incentive: IIncentive | undefined
-) => {
-  const [positions, positionsLoading] = useUserPositions(
-    incentive?.pool.id || ""
-  );
+export const useUserIncentivePositions = (incentive: IIncentive | undefined) => {
+	const [positions, positionsLoading] = useUserPositions(incentive?.pool.id || '')
 
-  const incentiveRewards = useIncentiveRewards(
-    positions?.map((p) => ({
-      incentive: incentive,
-      tokenId: p.tokenId,
-    })) ?? []
-  );
+	const incentiveRewards = useIncentiveRewards(
+		positions?.map((p) => ({
+			incentive: incentive,
+			tokenId: p.tokenId,
+		})) ?? [],
+	)
 
-  return {
-    positions: [
-      positions?.map((p, i) => ({
-        ...p,
-        incentiveRewards:
-          incentiveRewards !== undefined ? incentiveRewards[i] : 0,
-        incentive,
-      })),
-      positionsLoading,
-    ],
-  } as const;
-};
+	return {
+		positions: [
+			positions?.map((p, i) => ({
+				...p,
+				incentiveRewards: incentiveRewards !== undefined ? incentiveRewards[i] : 0,
+				incentive,
+			})),
+			positionsLoading,
+		],
+	} as const
+}
 
 export const useUserPositions = (poolId?: string) => {
-  const { address } = useWeb3();
-  const client = useGraphClient();
+	const { address } = useWeb3()
+	const client = useGraphClient()
 
-  const { data: ethPrice } = useGetEthPriceQuery({
-    variables: { filter: { id_in: ["1"] } },
-  });
+	const { data: ethPrice } = useGetEthPriceQuery({
+		variables: { filter: { id_in: ['1'] } },
+	})
 
-  const { data: stakerData, loading: stakerLoading } =
-    useGetStakerPositionsQuery({
-      variables: { where: { owner: address || "" } },
-      client,
-    });
-  const id_in = stakerData?.positions.map((p: any) => p.tokenId) || [];
-  const { data: poolData, loading } = useGetPositionsQuery({
-    variables: {
-      where: {
-        or: [
-          {
-            ...(poolId === undefined ? undefined : { pool: poolId }),
-            owner: address || "",
-          },
-          { id_in },
-        ],
-      },
-    },
-  });
-  const result = useMemo(() => {
-    if (!poolData || !stakerData) return;
-    const positions = poolData.positions
-      .map((p: any) => {
-        const stakerPosition = stakerData.positions.find(
-          (sp) => sp.tokenId === p.id
-        );
+	const { data: stakerData, loading: stakerLoading } = useGetStakerPositionsQuery({
+		variables: {
+			where: {
+				and: [
+					{
+						liquidity_not: 0,
+					},
+					{ oldOwner: ZERO_ADDRESS },
+					{ owner: address || '' },
+				],
+			},
+		},
+		client,
+	})
+	const id_in = stakerData?.positions.map((p: any) => p.tokenId) || []
+	const { data: poolData, loading } = useGetPositionsQuery({
+		variables: {
+			where: {
+				and: [
+					{
+						liquidity_not: 0,
+					},
+					{
+						or: [
+							{
+								...(poolId === undefined ? undefined : { pool: poolId }),
+								owner: address || '',
+							},
+							{ id_in },
+						],
+					},
+				],
+			},
+		},
+	})
 
-        const [amount0, amount1] = getPositionAmounts(
-          p.pool.tick,
-          p.tickLower.tickIdx,
-          p.tickUpper.tickIdx,
-          p.liquidity,
-          p.pool.sqrtPrice
-        );
+	const result = useMemo(() => {
+		if (!poolData || !stakerData) return
+		const positions = poolData.positions
+			.map((p: any) => {
+				const stakerPosition = stakerData.positions.find((sp) => sp.tokenId === p.id)
 
-        const valueUSD =
-          ((p.pool.token0.derivedETH * amount0) / 10 ** p.pool.token0.decimals +
-            (p.pool.token1.derivedETH * amount1) /
-              10 ** p.pool.token1.decimals) *
-          ethPrice?.bundles[0].ethPriceUSD;
+				const [amount0, amount1] = getPositionAmounts(
+					p.pool.tick,
+					p.tickLower.tickIdx,
+					p.tickUpper.tickIdx,
+					p.liquidity,
+					p.pool.sqrtPrice,
+				)
 
-        return {
-          ...stakerPosition,
-          ...p,
-          amount0,
-          amount1,
-          valueUSD,
-          deposited: ZERO_ADDRESS === stakerPosition?.oldOwner,
-        };
-      })
-      .filter((p: any) => (poolId === undefined ? true : p.pool.id === poolId));
-    return positions as IPosition[];
-  }, [poolData, ethPrice?.bundles, poolId, stakerData]);
+				const valueUSD =
+					((p.pool.token0.derivedETH * amount0) / 10 ** p.pool.token0.decimals +
+						(p.pool.token1.derivedETH * amount1) / 10 ** p.pool.token1.decimals) *
+					ethPrice?.bundles[0].ethPriceUSD
 
-  return [result, loading || stakerLoading] as const;
-};
+				return {
+					...stakerPosition,
+					...p,
+					amount0,
+					amount1,
+					valueUSD,
+					deposited: ZERO_ADDRESS === stakerPosition?.oldOwner,
+				}
+			})
+			.filter((p: any) => (poolId === undefined ? true : p.pool.id === poolId))
+		return positions as IPosition[]
+	}, [poolData, ethPrice?.bundles, poolId, stakerData])
+
+	return [result, loading || stakerLoading] as const
+}
 
 export const useUserStakedPositions = () => {
-  const { address } = useWeb3();
+	const { address } = useWeb3()
 
-  const [positions, positionsLoading] = useUserPositions();
-  const [incentives, incentivesLoading] = useIncentives();
+	const [positions, positionsLoading] = useUserPositions()
+	const [incentives, incentivesLoading] = useIncentives()
 
-  const result = useMemo(() => {
-    if (!positions) return;
-    const result = positions
-      .map((p: any) => {
-        if (!p.deposited || p.staked) return;
+	const result = useMemo(() => {
+		if (!positions) return
+		const result = positions
+			.map((p: any) => {
+				if (!p.deposited || p.staked) return
 
-        return { ...p, incentive: undefined };
-      })
-      .filter(Boolean) as IStakedPosition[];
+				return { ...p, incentive: undefined }
+			})
+			.filter(Boolean) as IStakedPosition[]
 
-    if (!incentives) return result;
-    incentives.forEach((i: any) => {
-      i?.stakedPositions?.forEach((p: any) => {
-        if (getAddress(p.position.owner) === address)
-          result.push({
-            ...positions.find((pos) => pos.tokenId === p.position.tokenId),
-            incentive: i,
-          } as IStakedPosition);
-      });
-    });
+		if (!incentives) return result
+		incentives.forEach((i: any) => {
+			i?.stakedPositions?.forEach((p: any) => {
+				if (getAddress(p.position.owner) === address) {
+					const position = positions.find((pos) => pos.tokenId === p.position.tokenId)
+					if (position) {
+						result.push({
+							...position,
+							incentive: i,
+						} as IStakedPosition)
+					}
+				}
+			})
+		})
 
-    return result;
-  }, [address, incentives, positions]);
+		return result
+	}, [address, incentives, positions])
 
-  const incentiveRewards = useIncentiveRewards(
-    result?.map((p) => ({
-      incentive: p.incentive,
-      tokenId: p.tokenId,
-    })) ?? []
-  );
+	const incentiveRewards = useIncentiveRewards(
+		result?.map((p) => ({
+			incentive: p.incentive,
+			tokenId: p.tokenId,
+		})) ?? [],
+	)
 
-  return [
-    result?.map((p, i) => ({
-      ...p,
-      incentiveRewards: incentiveRewards != undefined ? incentiveRewards[i] : 0,
-    })),
-    positionsLoading || incentivesLoading,
-  ] as const;
-};
+	return [
+		result?.map((p, i) => ({
+			...p,
+			incentiveRewards: incentiveRewards != undefined ? incentiveRewards[i] : 0,
+		})),
+		positionsLoading || incentivesLoading,
+	] as const
+}
