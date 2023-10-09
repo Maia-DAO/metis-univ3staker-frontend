@@ -13,6 +13,8 @@ const PositionMobileTable = dynamic(() => import('@/components/PositionsTable/Po
 export const RewardsPage: NextPage = () => {
 	const [data] = useUserStakedPositions()
 
+	console.log('data', data)
+
 	return (
 		<>
 			<PositionsTable data={data} title="My Deposited Positions" />
