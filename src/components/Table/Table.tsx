@@ -90,8 +90,8 @@ export const Table: React.FC<IProps> = ({ columns, data, showFilterButton, class
 
 	// Memoized filtered data
 	const filteredData = useMemo(() => {
-		return filterActive ? data.filter((item) => Date.now() <= item.endTime * 1000) : data
-	}, [data, filterActive])
+		return filterActive && showFilterButton ? data.filter((item) => Date.now() <= item.endTime * 1000) : data
+	}, [data, filterActive, showFilterButton])
 
 	const tableInstance = useTable(
 		{ columns, data: filteredData, initialState: { pageIndex: 0, pageSize: 20 } },
