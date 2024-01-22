@@ -1,9 +1,8 @@
 // @ts-nocheck
+import { IToggleProps, ToggleSwitch } from '@/components'
+import { useState } from 'react'
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs'
 import { usePagination, useSortBy, useTable } from 'react-table'
-import { ToggleSwitch, IToggleProps } from '@/components'
-import { useState } from 'react'
-import { Accordion } from '@/components'
 
 interface IProps {
 	data: any[]
