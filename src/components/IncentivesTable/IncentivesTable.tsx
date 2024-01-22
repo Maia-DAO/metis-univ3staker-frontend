@@ -1,15 +1,15 @@
 // @ts-nocheck
+import chevronDown from '@/../public/chevron.svg'
+import xIcon from '@/../public/x.svg'
+import TokenImage from '@/components/Tokens/TokenImage'
 import { TICK_WIDTH, YEAR } from '@/config/constants/const'
 import { IIncentive } from '@/types'
-import { formatBigInt, formatDateTime, formatUSD } from '@/utils'
+import { formatBigInt, formatUSD } from '@/utils'
+import Image from 'next/image'
 import Link from 'next/link'
+import check from '../../../public/check.svg'
 import { Button } from '../Button'
 import { Table } from '../Table'
-import Image from 'next/image'
-import { TOKEN_ICONS } from '@/config'
-import check from '../../../public/check.svg'
-import xIcon from '@/../public/x.svg'
-import chevronDown from '@/../public/chevron.svg'
 
 interface IProps {
 	data?: IIncentive[]
@@ -22,20 +22,8 @@ const columns = [
 		Cell: ({ value: pool, row: { original } }) => (
 			<Link href={`/${original.id}`} className="flex w-full flex-row items-center gap-6">
 				<div className="relative flex w-12 shrink-0 flex-col items-start">
-					<Image
-						src={TOKEN_ICONS[pool.token0.symbol]}
-						alt="Token icon"
-						width={32}
-						height={32}
-						className="z-10 h-8 w-8 rounded-full bg-dark-raisin"
-					/>
-					<Image
-						src={TOKEN_ICONS[pool.token1.symbol]}
-						alt="Token icon"
-						width={32}
-						height={32}
-						className="absolute left-6 top-0 h-8 w-8 rounded-full bg-dark-raisin"
-					/>
+					<TokenImage key={pool.token0.id} address={pool.token0.id} className="z-10 h-8 w-8" />
+					<TokenImage key={pool.token1.id} address={pool.token1.id} className="absolute left-6 top-0 h-8 w-8" />
 				</div>
 				<p className="text-md hover:text-white/75">
 					{pool.token0.symbol} / {pool.token1.symbol}
