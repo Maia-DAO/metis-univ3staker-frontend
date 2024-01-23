@@ -146,8 +146,16 @@ export const useIncentives = () => {
 
 				const fullRangeLiquidityUSD = convertBasedOnEfficiency(activeTickLiqudityUSD, pool?.feeTier, MAX_RANGE)
 
-				if (!pool || !rewardToken || !poolDayData) {
+				if (!pool || !rewardToken) {
 					return
+				}
+
+				if (!poolDayData) {
+					poolDayData = {
+						date: 0,
+						feesUSD: 0,
+						pool: pool,
+					}
 				}
 
 				return {
