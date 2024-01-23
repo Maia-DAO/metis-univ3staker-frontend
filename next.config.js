@@ -9,6 +9,9 @@ const nextConfig = {
 	sentry: {
 		hideSourceMaps: true,
 	},
+	images: {
+		domains: ['raw.githubusercontent.com' /* other domains if any */],
+	},
 }
 
 const sentryWebpackPluginOptions = {

@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { useWeb3 } from '@/hooks'
-import { useMemo } from 'react'
-import { formatBigInt, formatDateDiff, formatDateTimeShort, formatUSD } from '@/utils'
-import { TICK_WIDTH, YEAR } from '@/config/constants/const'
-import Image from 'next/image'
-import { TOKEN_ICONS } from '@/config'
-import Link from 'next/link'
 import { Button, ConnectWallet } from '@/components'
-import { IIncentive } from '@/types'
-import { ActionButtons } from './ActionButtons'
 import { MobileTable } from '@/components/Table/MobileTable'
+import { renderRewardApr } from '@/components/Table/RenderApr'
+import TokenImage from '@/components/Tokens/TokenImage'
+import { TICK_WIDTH, YEAR } from '@/config/constants/const'
+import { useWeb3 } from '@/hooks'
+import { IIncentive } from '@/types'
+import { formatBigInt, formatDateDiff, formatDateTimeShort, formatUSD } from '@/utils'
+import Link from 'next/link'
+import { useMemo } from 'react'
+import { ActionButtons } from './ActionButtons'
 
 const staticColumns = [
 	{
@@ -28,36 +28,6 @@ interface IProps {
 	data?: any[]
 	title?: string
 	incentive?: IIncentive
-}
-
-const renderRewardApr = (incentive: IIncentive) => {
-	const now = Date.now()
-	if (now > incentive.endTime * 1000) {
-		return <>0%</>
-	}
-
-	return (
-		<>
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.fullRangeLiquidityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			% -{' '}
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.activeLiqudityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			%
-		</>
-	)
 }
 
 const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
@@ -86,20 +56,8 @@ const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
 						<div className="flex justify-between">
 							<div className="flex w-full flex-row items-center gap-6">
 								<div className="relative flex w-12 shrink-0 flex-col items-start">
-									<Image
-										src={TOKEN_ICONS[incentive.pool.token0.symbol]}
-										alt="Token icon"
-										width={32}
-										height={32}
-										className="z-10 h-8 w-8 rounded-full bg-dark-raisin"
-									/>
-									<Image
-										src={TOKEN_ICONS[incentive.pool.token1.symbol]}
-										alt="Token icon"
-										width={32}
-										height={32}
-										className="absolute left-6 top-0 h-8 w-8 rounded-full bg-dark-raisin"
-									/>
+									<TokenImage address={incentive.pool.token0.id} className="z-10 h-8 w-8" />
+									<TokenImage address={incentive.pool.token1.id} className="absolute left-6 top-0 h-8 w-8" />
 								</div>
 								<p className="text-md hover:text-white/75">
 									{incentive.pool.token0.symbol} / {incentive.pool.token1.symbol}
@@ -191,9 +149,8 @@ const PositionsMobileTable: React.FC<IProps> = ({ data, incentive = null, title 
 							</p>
 							<p className="flex justify-end gap-1">
 								{!!row.incentiveRewards ? formatBigInt(row.incentiveRewards, row.incentive.rewardToken.decimals) : 0}
-								<Image
-									className="rounded-full bg-dark-raisin"
-									src={TOKEN_ICONS[row.incentive.rewardToken.symbol]}
+								<TokenImage
+									address={row.incentive.rewardToken.id}
 									alt={`${row.incentive.rewardToken.symbol.toString()} token`}
 									width={20}
 									height={20}

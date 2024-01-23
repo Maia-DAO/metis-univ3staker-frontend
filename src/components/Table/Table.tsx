@@ -1,8 +1,9 @@
 // @ts-nocheck
+import { IToggleProps, ToggleSwitch } from '@/components'
+import { useMemo, useState } from 'react'
 import { BsArrowDownShort, BsArrowLeftShort, BsArrowRightShort, BsArrowUpShort } from 'react-icons/bs'
 import { usePagination, useSortBy, useTable } from 'react-table'
-import { ToggleSwitch, IToggleProps } from '@/components'
-import { useState } from 'react'
+
 interface IProps {
 	data: any[]
 	columns: any[]
@@ -85,12 +86,18 @@ const FilterButton = ({ showFilterButton, onChange, label, checked }: { showFilt
 }
 
 export const Table: React.FC<IProps> = ({ columns, data, showFilterButton, className }) => {
+	const [filterActive, setFilterActive] = useState(true)
+
+	// Memoized filtered data
+	const filteredData = useMemo(() => {
+		return filterActive && showFilterButton ? data.filter((item) => Date.now() <= item.endTime * 1000) : data
+	}, [data, filterActive, showFilterButton])
+
 	const tableInstance = useTable(
-		{ columns, data, initialState: { pageIndex: 0, pageSize: 20 } },
+		{ columns, data: filteredData, initialState: { pageIndex: 0, pageSize: 20 } },
 		useSortBy,
 		usePagination,
 	)
-	const [filterActive, setFilterActive] = useState(true)
 
 	const {
 		getTableProps,
@@ -130,9 +137,6 @@ export const Table: React.FC<IProps> = ({ columns, data, showFilterButton, class
 					<tbody {...getTableBodyProps()}>
 						{page.map((row, idx) => {
 							prepareRow(row)
-							if (filterActive && Date.now() > row.original.endTime * 1000) {
-								return null
-							}
 
 							return <TableRow row={row} key={idx} />
 						})}
