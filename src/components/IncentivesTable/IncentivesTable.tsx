@@ -1,10 +1,11 @@
 // @ts-nocheck
 import chevronDown from '@/../public/chevron.svg'
 import xIcon from '@/../public/x.svg'
+import { renderFeeApr, renderRewardApr } from '@/components/Table/RenderApr'
 import TokenImage from '@/components/Tokens/TokenImage'
-import { TICK_WIDTH, YEAR } from '@/config/constants/const'
+import { TICK_WIDTH } from '@/config/constants/const'
 import { IIncentive } from '@/types'
-import { formatBigInt, formatUSD } from '@/utils'
+import { formatUSD } from '@/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import check from '../../../public/check.svg'
@@ -54,37 +55,7 @@ const columns = [
 		Header: 'Reward APR',
 		accessor: 'rewardapr',
 		Cell: ({ row: { original: row } }) => {
-			const now = Date.now()
-			return (
-				<>
-					<p className="text-md text-center">
-						{now > row.endTime * 1000 ? (
-							<>0%</>
-						) : (
-							<>
-								{(row.tokenPriceUSD > 0 &&
-									row.fullRangeLiquidityUSD > 0 &&
-									(
-										((formatBigInt(row.reward) * row.tokenPriceUSD) / row.fullRangeLiquidityUSD) *
-										(YEAR / (row.endTime - row.startTime)) *
-										100
-									).toFixed(2)) ||
-									0}
-								% -{' '}
-								{(row.tokenPriceUSD > 0 &&
-									row.activeLiqudityUSD > 0 &&
-									(
-										((formatBigInt(row.reward) * row.tokenPriceUSD) / row.activeLiqudityUSD) *
-										(YEAR / (row.endTime - row.startTime)) *
-										100
-									).toFixed(2)) ||
-									0}
-								%
-							</>
-						)}
-					</p>
-				</>
-			)
+			return renderRewardApr(row)
 		},
 	},
 	{
@@ -92,18 +63,7 @@ const columns = [
 		accessor: 'feeapr',
 		Cell: ({ row: { original: row } }) => (
 			<>
-				<p className="text-md text-center">
-					{(row.poolDayData.feesUSD > 0 &&
-						row.fullRangeLiquidityUSD > 0 &&
-						(((row.poolDayData.feesUSD * 0.9 * 365) / row.fullRangeLiquidityUSD) * 100).toFixed(2)) ||
-						0}
-					% -{' '}
-					{(row.poolDayData.feesUSD > 0 &&
-						row.activeLiqudityUSD > 0 &&
-						(((row.poolDayData.feesUSD * 0.9 * 365) / row.activeLiqudityUSD) * 100).toFixed(2)) ||
-						0}
-					%
-				</p>
+				<p className="text-md text-center">{renderFeeApr(row)}</p>
 			</>
 		),
 	},

@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { ConnectWallet } from '@/components'
+import { renderRewardApr } from '@/components/Table/RenderApr'
 import TokenImage from '@/components/Tokens/TokenImage'
 import { TICK_WIDTH, YEAR } from '@/config/constants/const'
 import { useWeb3 } from '@/hooks'
@@ -29,36 +30,6 @@ const staticColumns = [
 		Cell: ({ value }: any) => <p className="text-md text-center">{formatDateDiff(value.timestamp * 1000)}</p>,
 	},
 ]
-
-const renderRewardApr = (incentive: IIncentive) => {
-	const now = Date.now()
-	if (now > incentive.endTime * 1000) {
-		return <>0%</>
-	}
-
-	return (
-		<>
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.fullRangeLiquidityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			% -{' '}
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.activeLiqudityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			%
-		</>
-	)
-}
 
 const SingleIncentive: React.FC<IProps> = (props) => {
 	const { incentive } = props

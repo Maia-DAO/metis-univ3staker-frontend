@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { Button, ConnectWallet } from '@/components'
 import { MobileTable } from '@/components/Table/MobileTable'
+import { renderRewardApr } from '@/components/Table/RenderApr'
 import TokenImage from '@/components/Tokens/TokenImage'
 import { TICK_WIDTH, YEAR } from '@/config/constants/const'
 import { useWeb3 } from '@/hooks'
@@ -27,36 +28,6 @@ interface IProps {
 	data?: any[]
 	title?: string
 	incentive?: IIncentive
-}
-
-const renderRewardApr = (incentive: IIncentive) => {
-	const now = Date.now()
-	if (now > incentive.endTime * 1000) {
-		return <>0%</>
-	}
-
-	return (
-		<>
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.fullRangeLiquidityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			% -{' '}
-			{(incentive.tokenPriceUSD > 0 &&
-				incentive.activeLiqudityUSD > 0 &&
-				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
-					(YEAR / (incentive.endTime - incentive.startTime)) *
-					100
-				).toFixed(2)) ||
-				0}
-			%
-		</>
-	)
 }
 
 const SingleMobileIncentive: React.FC<IProps> = ({ incentive }) => {
