@@ -1,8 +1,7 @@
 import { YEAR } from '@/config/constants/const'
-import { IIncentive } from '@/types'
 import { formatBigInt } from '@/utils'
 
-export const renderRewardApr = (incentive: IIncentive) => {
+export const renderRewardApr = (incentive: any) => {
 	const now = Date.now()
 	if (
 		now > incentive.endTime * 1000 ||
@@ -16,7 +15,7 @@ export const renderRewardApr = (incentive: IIncentive) => {
 		<>
 			{(incentive.fullRangeLiquidityUSD > 0 &&
 				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
+					((Number(formatBigInt(incentive.reward)) * incentive.tokenPriceUSD) / incentive.fullRangeLiquidityUSD) *
 					(YEAR / (incentive.endTime - incentive.startTime)) *
 					100
 				).toFixed(2)) ||
@@ -24,7 +23,7 @@ export const renderRewardApr = (incentive: IIncentive) => {
 			% -{' '}
 			{(incentive.activeLiqudityUSD > 0 &&
 				(
-					((formatBigInt(incentive.reward) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
+					((Number(formatBigInt(incentive.reward)) * incentive.tokenPriceUSD) / incentive.activeLiqudityUSD) *
 					(YEAR / (incentive.endTime - incentive.startTime)) *
 					100
 				).toFixed(2)) ||
@@ -34,7 +33,7 @@ export const renderRewardApr = (incentive: IIncentive) => {
 	)
 }
 
-export const renderFeeApr = (incentive: IIncentive) => {
+export const renderFeeApr = (incentive: any) => {
 	if (
 		incentive.poolDayData.feesUSD === 0 ||
 		(incentive.fullRangeLiquidityUSD === 0 && incentive.activeLiqudityUSD === 0)
